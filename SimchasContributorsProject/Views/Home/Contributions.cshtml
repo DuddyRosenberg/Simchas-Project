@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Contrinutions";
+}
+@model Simcha
+
+<h1>Contrinutions For @Model.Name</h1>
+<form method="post" action="/home/AddContributions">
+    <input type="hidden" name="simchaID" value="@Model.ID" />
+    <table class="table table-bordered">
+        <tr>
+            <th>Contribute</th>
+            <th>Name</th>
+            <th>Balance</th>
+            <th>Always Include</th>
+            <th>Amount</th>
+        </tr>
+        @for (int i = 0; i < Model.Contributors.Count; i++)
+        {
+            var contributor = Model.Contributors[i];
+            <tr>
+                <td>
+                    <input @(contributor.Contribution > 0 ? "checked" : "") type="checkbox" value="true" name="contributions[@i].Contribute" />
+                </td>
+                <td>@contributor.LastName @contributor.FirstName</td>
+                <td>@contributor.Balance.ToString("C")</td>
+                <td>
+                    @if (contributor.AlwaysInclude)
+                    {
+                        <span class="check"></span>
+                    }
+                </td>
+                <td>
+                    <input type="hidden" name="contributions[@i].contributorID" value="@contributor.ID" />
+                    @if (contributor.Contribution == 0)
+                    {
+                        contributor.Contribution = 5;
+                    }
+                    $<input value="@((double)(contributor.Contribution))" name="contributions[@i].Amount" />
+                </td>
+            </tr>
+        }
+    </table>
+    <div style="text-align:center;vertical-align:middle">
+        <button class="btn btn-danger">Update</button>
+    </div>
+</form>

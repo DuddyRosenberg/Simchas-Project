@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Contributors";
+}
+@model List<Contributor>
+
+<div id="contributors-page">
+    <div style="text-align:center;vertical-align:middle">
+        <h1>Contributors</h1>
+        <button style="margin:5px" class="btn btn-danger" id="add-contributor-btn">Add Contributor</button>
+    </div>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>Deposit</th>
+            <th>Name</th>
+            <th>Cell</th>
+            <th>Balance</th>
+            <th>Alwayws Include</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (Contributor contributor in Model)
+        {
+            <tr>
+                <td><button data-contributor-id="@contributor.ID" class="btn btn-success deposit-btn">Deposit</button></td>
+                <td>@contributor.LastName @contributor.FirstName</td>
+                <td>@contributor.CellNumber</td>
+                <td>@contributor.Balance.ToString("C")</td>
+                <td>
+                    @if (contributor.AlwaysInclude)
+                    {
+                        <span class="check"></span>
+                    }
+                </td>
+                <td>
+                    <a href="/home/ShowHistory?id=@contributor.ID" class="btn btn-primary">Show History</a>
+                    <button class="btn btn-warning edit-btn"
+                            data-id="@contributor.ID"
+                            data-first-name="@contributor.FirstName"
+                            data-last-name="@contributor.LastName"
+                            data-cell-number="@contributor.CellNumber"
+                            data-always-include="@contributor.AlwaysInclude">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div id="add-contributor-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Contributor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="/home/AddContributor">
+                    <div class="modal-body">
+                        <input class="form-control" name="FirstName" placeholder="First Name" required style="margin:5px" />
+                        <input class="form-control" name="LastName" placeholder="Last Name" required style="margin:5px" />
+                        <input class="form-control" name="CellNumber" placeholder="CellNumber" required style="margin:5px" />
+                        <input class="form-control" name="amount" placeholder="Initial Deposit" required style="margin:5px" />
+                        <input type="date" class="form-control" name="dateCreated" required style="margin:5px" />
+                        <input type="checkbox" name="AlwaysInclude" value="true" />Always Include
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="deposit-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Deposit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="deposit-form" method="post" action="/home/AddDeposit">
+                    <div class="modal-body">
+                        <input class="form-control" name="Amount" placeholder="Amount" required style="margin:5px" />
+                        <input type="date" class="form-control" name="date" required style="margin:5px" />
+                        <input id="contributor-id" type="hidden" name="contributorID" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/Contributors.js"></script>
+}

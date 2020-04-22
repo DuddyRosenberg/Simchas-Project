@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "ShowHistory";
+}
+@model ShowHistoryViewModel
+
+<h1>History For @Model.Contributor.FirstName @Model.Contributor.LastName</h1>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Action</th>
+        <th>Date</th>
+        <th>Amount</th>
+    </tr>
+    @foreach (Transection transection in Model.Transections)
+    {
+        <tr>
+            <td>@transection.Description</td>
+            <td>@transection.Date.ToShortDateString()</td>
+            <td>@transection.Amount.ToString("C")</td>
+        </tr>
+    }
+</table>

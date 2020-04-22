@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Simchas";
+}
+@model SimchasViewModel
+<div style="text-align:center;vertical-align:middle">
+    <h1>Simchas</h1>
+    <button style="margin:5px" class="btn btn-danger" id="add-simcha-btn">Add Simcha</button>
+</div>
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>Contributions</th>
+        <th>Simcha Name</th>
+        <th>Contributor Count</th>
+        <th>Total</th>
+        <th>Date</th>
+    </tr>
+    @foreach (Simcha simcha in Model.Simchas)
+    {
+        <tr>
+            <td>
+                <a class="btn btn-primary" href="/home/contributions?id=@simcha.ID">Contributions</a>
+            </td>
+            <td>@simcha.Name</td>
+            <td>@simcha.Contributions.Count/@Model.TotalContributors</td>
+            <td>@simcha.Contributions.Sum().ToString("C")</td>
+            <td>@simcha.Date.ToShortDateString()</td>
+        </tr>
+    }
+</table>
+
+<div id="add-simcha-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Simcha</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="/home/AddSimcha">
+                <div class="modal-body">
+                    <input class="form-control" name="Name" placeholder="Name" required style="margin:5px" />
+                    <input type="date" class="form-control" name="Date" required style="margin:5px" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/Simchas.js"></script>
+}
