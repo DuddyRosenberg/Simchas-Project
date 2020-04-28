@@ -19,16 +19,21 @@ namespace SimchasContributorsProject.Controllers
             {
                 Simchas = _database.GetSimchas(),
                 TotalContributors = _database.GetTotalContributors(),
+                SuccessMessage = (string)TempData["success-message"],
             });
         }
         public IActionResult Contributors()
         {
-            return View(_database.GetContributors());
+            return View(new ContributorsViewModel
+            {
+                Contributors = _database.GetContributors(),
+                SuccessMessage = (string)TempData["success-message"],
+            });
         }
         [HttpPost]
         public IActionResult AddSimcha(Simcha simcha)
         {
-          var simchaId= _database.AddSimcha(simcha);
+            var simchaId = _database.AddSimcha(simcha);
             foreach (var contributor in _database.GetContributors())
             {
                 if (contributor.AlwaysInclude)
@@ -36,22 +41,26 @@ namespace SimchasContributorsProject.Controllers
                     _database.AddContribution(new Contribution
                     {
                         Amount = 5,
-                        ContributorID=contributor.ID,
-                        SimchaID= simchaId,
+                        ContributorID = contributor.ID,
+                        SimchaID = simchaId,
                     });
                 }
             }
+            TempData["success-message"] = "Simcha Added Successfully";
             return Redirect("/home/Simchas");
         }
         [HttpPost]
         public IActionResult AddContributor(Contributor contributor, decimal amount, DateTime dateCreated)
         {
             _database.AddDeposit(_database.AddContributor(contributor), amount, dateCreated);
+            TempData["success-message"] = "Contributor Added Successfully";
             return Redirect("/home/contributors");
         }
+        [HttpPost]
         public IActionResult AddDeposit(decimal amount, DateTime date, int contributorID)
         {
             _database.AddDeposit(contributorID, amount, date);
+            TempData["success-message"] = "Deposit Added Successfully";
             return Redirect("/home/contributors");
         }
         public IActionResult ShowHistory(int id)
@@ -67,9 +76,10 @@ namespace SimchasContributorsProject.Controllers
             return View(_database.GetSimchaWithContributors(id));
         }
         [HttpPost]
-        public IActionResult AddContributions(int simchaID,List<Contribution> contributions)
+        public IActionResult AddContributions(int simchaID, List<Contribution> contributions)
         {
             _database.DeleteAndAddContributions(simchaID, contributions);
+            TempData["success-message"] = "Contributions Added Successfully";
             return Redirect("/home/simchas");
         }
     }

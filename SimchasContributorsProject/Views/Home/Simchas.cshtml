@@ -2,6 +2,17 @@
     ViewData["Title"] = "Simchas";
 }
 @model SimchasViewModel
+
+@if (!String.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @Model.SuccessMessage
+        <button class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
 <div style="text-align:center;vertical-align:middle">
     <h1>Simchas</h1>
     <button style="margin:5px" class="btn btn-danger" id="add-simcha-btn">Add Simcha</button>

@@ -6,10 +6,9 @@ using SimchasContributorsProject.Data;
 
 namespace SimchasContributorsProject.Models
 {
-    public class SimchasViewModel
+    public class ContributorsViewModel
     {
-        public List<Simcha> Simchas { get; set; }
-        public int TotalContributors { get; set; }
+        public List<Contributor> Contributors { get; set; }
         public string SuccessMessage { get; set; }
     }
 }

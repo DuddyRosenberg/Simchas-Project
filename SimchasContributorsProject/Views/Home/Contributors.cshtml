@@ -1,7 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Contributors";
 }
-@model List<Contributor>
+@model ContributorsViewModel
+
+@if (!String.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @Model.SuccessMessage
+        <button class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+}
 
 <div id="contributors-page">
     <div style="text-align:center;vertical-align:middle">
@@ -17,7 +28,7 @@
             <th>Alwayws Include</th>
             <th>Actions</th>
         </tr>
-        @foreach (Contributor contributor in Model)
+        @foreach (Contributor contributor in Model.Contributors)
         {
             <tr>
                 <td><button data-contributor-id="@contributor.ID" class="btn btn-success deposit-btn">Deposit</button></td>
