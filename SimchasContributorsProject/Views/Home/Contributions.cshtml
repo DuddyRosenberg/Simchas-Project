@@ -1,11 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Contrinutions";
 }
-@model Simcha
+@model ContributionsViewModel
 
-<h1>Contrinutions For @Model.Name</h1>
+<h1>Contrinutions For @Model.Simcha.Name</h1>
 <form method="post" action="/home/AddContributions">
-    <input type="hidden" name="simchaID" value="@Model.ID" />
+    <input type="hidden" name="simchaID" value="@Model.Simcha.ID" />
     <table class="table table-bordered">
         <tr>
             <th>Contribute</th>

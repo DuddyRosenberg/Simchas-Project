@@ -42,8 +42,7 @@ namespace SimchasContributorsProject.Controllers
                     {
                         Amount = 5,
                         ContributorID = contributor.ID,
-                        SimchaID = simchaId,
-                    });
+                    }, simcha.ID);
                 }
             }
             TempData["success-message"] = "Simcha Added Successfully";
@@ -73,7 +72,11 @@ namespace SimchasContributorsProject.Controllers
         }
         public IActionResult Contributions(int id)
         {
-            return View(_database.GetSimchaWithContributors(id));
+            return View(new ContributionsViewModel
+            {
+                Contributors = _database.GetContributorsWithContributions(id),
+                Simcha = _database.GetSimchaByID(id)
+            });
         }
         [HttpPost]
         public IActionResult AddContributions(int simchaID, List<Contribution> contributions)

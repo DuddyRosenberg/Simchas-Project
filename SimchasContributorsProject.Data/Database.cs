@@ -205,9 +205,8 @@ namespace SimchasContributorsProject.Data
                 };
             }
         }
-        public Simcha GetSimchaWithContributors(int id)
+        public Simcha GetSimchaByID(int id)
         {
-            var simcha = new Simcha();
             using (var connection = new SqlConnection(_connectionString))
             using (var command = connection.CreateCommand())
             {
@@ -216,11 +215,16 @@ namespace SimchasContributorsProject.Data
                 connection.Open();
                 var reader = command.ExecuteReader();
                 reader.Read();
-                simcha.ID = id;
-                simcha.Name = (string)reader["Name"];
-                simcha.Date = (DateTime)reader["Date"];
-                simcha.Contributors = GetContributors();
+                return new Simcha
+                {
+                    ID = id,
+                    Name = (string)reader["Name"],
+                };
             }
+        }
+        public List<Contributor> GetContributorsWithContributions(int id)
+        {
+            var contributors = GetContributors();
             using (var connection = new SqlConnection(_connectionString))
             using (var command = connection.CreateCommand())
             {
@@ -230,11 +234,11 @@ namespace SimchasContributorsProject.Data
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    simcha.Contributors.FirstOrDefault(c => c.ID == (int)reader["ContributorID"])
+                    contributors.FirstOrDefault(c => c.ID == (int)reader["ContributorID"])
                         .Contribution = (decimal)reader["Amount"];
                 }
             }
-            return simcha;
+            return contributors;
         }
         public void DeleteAndAddContributions(int simchaID, List<Contribution> contributions)
         {
@@ -265,7 +269,7 @@ namespace SimchasContributorsProject.Data
                 }
             }
         }
-        public void AddContribution(Contribution contribution)
+        public void AddContribution(Contribution contribution,int simchaID)
         {
             using (var connection = new SqlConnection(_connectionString))
             using (var command = connection.CreateCommand())
@@ -273,7 +277,7 @@ namespace SimchasContributorsProject.Data
                 command.CommandText = "INSERT INTO Contributions(Amount,SimchaID,ContributorID,Date)" +
                                       "VALUES(@amount,@simchaID,@contributorID,@date)";
                 command.Parameters.AddWithValue("@amount", contribution.Amount);
-                command.Parameters.AddWithValue("@simchaID", contribution.SimchaID);
+                command.Parameters.AddWithValue("@simchaID", simchaID);
                 command.Parameters.AddWithValue("@contributorID", contribution.ContributorID);
                 command.Parameters.AddWithValue("@date", DateTime.Now);
                 connection.Open();

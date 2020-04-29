@@ -9,6 +9,5 @@ namespace SimchasContributorsProject.Data
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public List<decimal> Contributions { get; set; } = new List<decimal>();
-        public List<Contributor> Contributors { get;set; }
     }
 }
